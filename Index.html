@@ -1,2 +1,310 @@
-# Bloxfruitsfruitvalue
-Best bloxfruit value u can get!.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bloxfruit'sfruits value.com | Ultimate Value & Skins Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .glow-gold { box-shadow: 0 0 25px rgba(234, 179, 8, 0.25); }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- HEADER -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="bg-gradient-to-tr from-amber-500 to-purple-600 p-2 rounded-xl glow-gold">
+                    <i data-lucide="gem" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm sm:text-base font-black tracking-wider bg-gradient-to-r from-amber-400 via-purple-400 to-pink-500 bg-clip-text text-transparent uppercase">
+                        bloxfruit'sfruits value<span class="text-amber-500">.com</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="flex space-x-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('calculator')" id="nav-calculator" class="px-3 py-1.5 rounded-lg font-bold text-xs transition-all bg-amber-500 text-slate-950 shadow">Calc</button>
+                <button onclick="switchTab('values')" id="nav-values" class="px-3 py-1.5 rounded-lg font-bold text-xs text-slate-400 hover:text-white transition-all">Values</button>
+                <button onclick="switchTab('skins')" id="nav-skins" class="px-3 py-1.5 rounded-lg font-bold text-xs text-slate-400 hover:text-white transition-all">Skins</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-3 py-4 flex-grow w-full space-y-6">
+
+        <!-- TAB 1: CALCULATOR -->
+        <div id="tab-calculator" class="space-y-4">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                <div>
+                    <h2 class="font-bold text-sm text-white">Trade Value Calculator</h2>
+                    <p class="text-xs text-slate-400">Tap items below to check fairness.</p>
+                </div>
+                <button onclick="clearTrade()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700">Reset</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                
+                <!-- MY OFFER -->
+                <div class="md:col-span-5 bg-slate-900/50 border border-slate-800 rounded-2xl p-3">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800 text-sm">
+                        <span class="font-black text-blue-400 uppercase">Your Offer</span>
+                        <span id="my-total-val" class="font-black text-amber-400">Value: 0</span>
+                    </div>
+                    <div id="my-offer-slots" class="grid grid-cols-4 gap-2 min-h-[90px] max-h-[160px] overflow-y-auto p-2 bg-slate-950/50 rounded-xl border border-slate-800/80 mb-3">
+                        <div class="col-span-4 flex items-center justify-center text-slate-500 text-xs py-4">Tap items below</div>
+                    </div>
+                    <input type="text" id="search-my-fruits" onkeyup="filterInventory('my')" placeholder="Search items..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 mb-2 focus:outline-none focus:border-amber-500">
+                    <div id="my-inventory" class="grid grid-cols-4 gap-2 max-h-[180px] overflow-y-auto"></div>
+                </div>
+
+                <!-- MIDDLE STATUS -->
+                <div class="md:col-span-2 flex flex-col items-center justify-center space-y-2 py-3 bg-slate-900/30 border border-slate-800/60 rounded-2xl p-3 text-center">
+                    <div id="trade-status-badge" class="px-3 py-1.5 rounded-xl font-black text-xs uppercase bg-slate-800 text-slate-300 border border-slate-700 w-full">
+                        Select Items
+                    </div>
+                    <div class="text-[11px] text-slate-400">Diff: <span id="val-diff" class="font-bold text-slate-200">0</span></div>
+                </div>
+
+                <!-- THEIR OFFER -->
+                <div class="md:col-span-5 bg-slate-900/50 border border-slate-800 rounded-2xl p-3">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800 text-sm">
+                        <span class="font-black text-purple-400 uppercase">Their Offer</span>
+                        <span id="their-total-val" class="font-black text-amber-400">Value: 0</span>
+                    </div>
+                    <div id="their-offer-slots" class="grid grid-cols-4 gap-2 min-h-[90px] max-h-[160px] overflow-y-auto p-2 bg-slate-950/50 rounded-xl border border-slate-800/80 mb-3">
+                        <div class="col-span-4 flex items-center justify-center text-slate-500 text-xs py-4">Tap items below</div>
+                    </div>
+                    <input type="text" id="search-their-fruits" onkeyup="filterInventory('their')" placeholder="Search items..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 mb-2 focus:outline-none focus:border-purple-500">
+                    <div id="their-inventory" class="grid grid-cols-4 gap-2 max-h-[180px] overflow-y-auto"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: VALUES LIST -->
+        <div id="tab-values" class="space-y-4 hidden">
+            <input type="text" id="search-database" onkeyup="filterDatabase()" placeholder="Search all fruits..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="database-grid"></div>
+        </div>
+
+        <!-- TAB 3: SKINS -->
+        <div id="tab-skins" class="space-y-4 hidden">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="skins-grid"></div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800 bg-slate-900/40 py-4 text-center text-[10px] text-slate-500">
+        <p>bloxfruit'sfruits value.com &copy; 2026</p>
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        const fruitDatabase = [
+            { id: 'dragon_rework', name: 'Dragon (Awakened)', tier: 'Mythical', value: 250000000, demand: 'Very High', icon: '🔥', skin: false },
+            { id: 'kit', name: 'Kitsune', tier: 'Mythical', value: 140000000, demand: 'Very High', icon: '🦊', skin: false },
+            { id: 'kitsune_skin_celestial', name: 'Kitsune (Celestial)', tier: 'Skin', value: 210000000, demand: 'Extreme', icon: '✨', skin: true },
+            { id: 'leo', name: 'Leopard', tier: 'Mythical', value: 45000000, demand: 'High', icon: '🐆', skin: false },
+            { id: 'leo_skin_ruby', name: 'Leopard (Ruby)', tier: 'Skin', value: 85000000, demand: 'High', icon: '💎', skin: true },
+            { id: 'dough', name: 'Dough', tier: 'Mythical', value: 25000000, demand: 'Very High', icon: '🍩', skin: false },
+            { id: 'dough_skin_frost', name: 'Dough (Frostbite)', tier: 'Skin', value: 48000000, demand: 'High', icon: '❄️', skin: true },
+            { id: 't_rex', name: 'T-Rex', tier: 'Mythical', value: 22000000, demand: 'Stable', icon: '🦖', skin: false },
+            { id: 'spirit', name: 'Spirit', tier: 'Mythical', value: 15000000, demand: 'Stable', icon: '👻', skin: false },
+            { id: 'control', name: 'Control', tier: 'Mythical', value: 12000000, demand: 'Rising', icon: '🕹️', skin: false },
+            { id: 'portal', name: 'Legendary', name: 'Portal', tier: 'Legendary', value: 10000000, demand: 'Extreme', icon: '🌀', skin: false },
+            { id: 'portal_skin_galaxy', name: 'Portal (Galaxy)', tier: 'Skin', value: 24000000, demand: 'Very High', icon: '🌌', skin: true },
+            { id: 'budha', name: 'Buddha', tier: 'Legendary', value: 9000000, demand: 'Extreme', icon: '🧘', skin: false },
+            { id: 'eagle_update', name: 'Eagle (Upd)', tier: 'Legendary', value: 11000000, demand: 'Very High', icon: '🦅', skin: false },
+            { id: 'magma', name: 'Magma', tier: 'Rare', value: 1500000, demand: 'High', icon: '🌋', skin: false },
+            { id: 'light', name: 'Light', tier: 'Rare', value: 1200000, demand: 'Stable', icon: '⚡', skin: false }
+        ];
+
+        let myOffer = [];
+        let theirOffer = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderInventories();
+            renderDatabase();
+            renderSkinsHub();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+
+        function switchTab(tabName) {
+            ['calculator', 'values', 'skins'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`nav-${t}`).classList.remove('bg-amber-500', 'text-slate-950');
+                document.getElementById(`nav-${t}`).classList.add('text-slate-400');
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabName}`).classList.add('bg-amber-500', 'text-slate-950');
+            document.getElementById(`nav-${tabName}`).classList.remove('text-slate-400');
+        }
+
+        function renderInventories(mQuery = '', tQuery = '') {
+            const myInv = document.getElementById('my-inventory');
+            const theirInv = document.getElementById('their-inventory');
+            myInv.innerHTML = '';
+            theirInv.innerHTML = '';
+
+            fruitDatabase.filter(f => f.name.toLowerCase().includes(mQuery.toLowerCase())).forEach(item => {
+                myInv.innerHTML += createCard(item, 'my');
+            });
+            fruitDatabase.filter(f => f.name.toLowerCase().includes(tQuery.toLowerCase())).forEach(item => {
+                theirInv.innerHTML += createCard(item, 'their');
+            });
+        }
+
+        function createCard(item, side) {
+            return `
+                <div onclick="addItem('${item.id}', '${side}')" class="cursor-pointer bg-slate-950 border border-slate-800 rounded-xl p-2 text-center hover:border-amber-400 transition-all">
+                    <div class="text-xl mb-1">${item.icon}</div>
+                    <div class="text-[10px] font-bold text-slate-300 truncate">${item.name}</div>
+                    <div class="text-[9px] text-amber-400 font-semibold">${formatNum(item.value)}</div>
+                </div>
+            `;
+        }
+
+        function filterInventory(side) {
+            if (side === 'my') {
+                renderInventories(document.getElementById('search-my-fruits').value, document.getElementById('search-their-fruits').value);
+            } else {
+                renderInventories(document.getElementById('search-my-fruits').value, document.getElementById('search-their-fruits').value);
+            }
+        }
+
+        function addItem(id, side) {
+            const item = fruitDatabase.find(f => f.id === id);
+            if (!item) return;
+            const target = side === 'my' ? myOffer : theirOffer;
+            target.push({ ...item, uniqueId: Math.random() });
+            renderSlots(side);
+            calcTrade();
+        }
+
+        function removeItem(uniqueId, side) {
+            if (side === 'my') {
+                myOffer = myOffer.filter(i => i.uniqueId !== uniqueId);
+            } else {
+                theirOffer = theirOffer.filter(i => i.uniqueId !== uniqueId);
+            }
+            renderSlots(side);
+            calcTrade();
+        }
+
+        function clearTrade() {
+            myOffer = [];
+            theirOffer = [];
+            renderSlots('my');
+            renderSlots('their');
+            calcTrade();
+        }
+
+        function renderSlots(side) {
+            const container = document.getElementById(`${side}-offer-slots`);
+            const list = side === 'my' ? myOffer : theirOffer;
+            if (list.length === 0) {
+                container.innerHTML = `<div class="col-span-4 flex items-center justify-center text-slate-500 text-xs py-4">Tap items below</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            list.forEach(item => {
+                container.innerHTML += `
+                    <div onclick="removeItem(${item.uniqueId}, '${side}')" class="cursor-pointer bg-slate-900 border border-slate-700 rounded-xl p-1.5 text-center relative">
+                        <div class="text-lg">${item.icon}</div>
+                        <div class="text-[9px] font-bold text-slate-200 truncate">${item.name}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function calcTrade() {
+            const myTot = myOffer.reduce((a, c) => a + c.value, 0);
+            const theirTot = theirOffer.reduce((a, c) => a + c.value, 0);
+            document.getElementById('my-total-val').innerText = `Value: ${formatNum(myTot)}`;
+            document.getElementById('their-total-val').innerText = `Value: ${formatNum(theirTot)}`;
+
+            const diff = theirTot - myTot;
+            document.getElementById('val-diff').innerText = (diff >= 0 ? '+' : '') + formatNum(diff);
+
+            const badge = document.getElementById('trade-status-badge');
+            if (myOffer.length === 0 && theirOffer.length === 0) {
+                badge.className = "px-3 py-1.5 rounded-xl font-black text-xs uppercase bg-slate-800 text-slate-300 border border-slate-700 w-full";
+                badge.innerText = "Select Items";
+                return;
+            }
+            const ratio = myTot > 0 ? (theirTot / myTot) * 100 : 100;
+            if (ratio >= 90 && ratio <= 110) {
+                badge.className = "px-3 py-1.5 rounded-xl font-black text-xs uppercase bg-emerald-500 text-slate-950 w-full";
+                badge.innerText = "⚖️ Fair Trade";
+            } else if (ratio > 110) {
+                badge.className = "px-3 py-1.5 rounded-xl font-black text-xs uppercase bg-amber-500 text-slate-950 w-full";
+                badge.innerText = "🔥 Huge Win";
+            } else {
+                badge.className = "px-3 py-1.5 rounded-xl font-black text-xs uppercase bg-rose-500 text-white w-full";
+                badge.innerText = "⚠️ Lose Trade";
+            }
+        }
+
+        function renderDatabase(query = '') {
+            const grid = document.getElementById('database-grid');
+            grid.innerHTML = '';
+            fruitDatabase.filter(f => f.name.toLowerCase().includes(query.toLowerCase())).forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
+                        <div>
+                            <div class="text-2xl mb-1">${item.icon}</div>
+                            <div class="font-bold text-xs text-white">${item.name}</div>
+                        </div>
+                        <div class="mt-3 pt-2 border-t border-slate-800 flex justify-between text-[10px]">
+                            <span class="text-amber-400 font-black">${formatNum(item.value)}</span>
+                            <span class="text-emerald-400 font-bold">${item.demand}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterDatabase() {
+            renderDatabase(document.getElementById('search-database').value);
+        }
+
+        function renderSkinsHub() {
+            const grid = document.getElementById('skins-grid');
+            grid.innerHTML = '';
+            fruitDatabase.filter(f => f.skin).forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3 flex flex-col justify-between">
+                        <div>
+                            <div class="text-2xl mb-1">${item.icon}</div>
+                            <div class="font-bold text-xs text-white">${item.name}</div>
+                        </div>
+                        <div class="mt-3 pt-2 border-t border-purple-900/40 flex justify-between text-[10px]">
+                            <span class="text-amber-400 font-black">${formatNum(item.value)}</span>
+                            <span class="text-purple-300 font-bold">Skin</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function formatNum(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(0) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+            return n.toString();
+        }
+    </script>
+</body>
+  </html>
+  
